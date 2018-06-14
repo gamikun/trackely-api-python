@@ -10,11 +10,11 @@ setup(
   packages = ['trackely_client'],  
   long_description=open('README.md').read(),
   version = trackely_client.__version__,
-  description = 'Ads and blank gif tracking',
+  description = 'Client for trackely service',
   install_requires=['requests'],
   author = 'Gamaliel Espinoza',
   author_email = 'gamaliel.espinoza@gmail.com',
-  url = 'https://git.miralo.xyz/eDesarrollos/trackely-client-python',
+  url = 'https://github.com/gamikun/trackely-client-python',
   keywords = ['trackely'], 
   classifiers = [],
 )

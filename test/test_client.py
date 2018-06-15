@@ -184,7 +184,28 @@ class TestClient(unittest.TestCase):
         self.assertTrue(res['success'])
         self.assertEqual(res['html'], '<div>something</div>')
 
+    @httpretty.activate
+    def test_modify_ad(self):
+        httpretty.register_uri(httpretty.PUT,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'ad': {
+                    'id': 'ABC',
+                    'description': 'Mexico',
+                    'target_url': 'http://mexico.com/HOLA'
+                },
+            })
+        )
 
+        res = self.client.modify_ad(ad_id='ABC',
+            description='Mexico',
+            target_url='http://mexico.com/HOLA'
+        )
+
+        self.assertTrue(res['success'])
+        self.assertEqual(res['ad']['id'], 'ABC')
+        self.assertEqual(res['ad']['target_url'], 'http://mexico.com/HOLA')
 
 
 if __name__ == '__main__':

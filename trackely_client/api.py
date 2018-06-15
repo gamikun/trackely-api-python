@@ -44,21 +44,16 @@ class APIClient(object):
 
         return response.json()
 
-    def modify_ad(self, description=None, campaign_id=None,
-                  target_url=None, image_data=None):
+    def upload_ad_image(self, ad_id=None, image=None):
         url = os.path.join(self.base_url, 'ads')
-
-        if isinstance(image_data, str):
-            image_data = open(image_data, 'rb')
-
-        response = requests.post(url,
+        response = requests.put(url,
             headers=self.headers,
-            data={
-                'description': description,
-                'campaign_id': campaign_id,
+            params={
+                'action': 'upload_image',
+                'ad_id': ad_id
             },
             files={
-                'file': image_data
+                'file': image
             }
         )
 

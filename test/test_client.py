@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from trackely_client.api import APIClient
+from binascii import unhexlify
 from os.path import join
 import httpretty
 import unittest
@@ -138,6 +139,35 @@ class TestClient(unittest.TestCase):
         self.assertIsInstance(res['ads'], list)
         self.assertEqual(len(res['ads']), 1)
         self.assertEqual(res['ads'][0]['campaign_id'], 'b' * 24)
+
+    @httpretty.activate
+    def test_upload_ad_image(self):
+        httpretty.register_uri(httpretty.PUT,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'ad': {
+                    'image_url': 'http://algo',
+                    'image_size': [1, 2]
+                },
+            })
+        )
+
+        res = self.client.upload_ad_image(
+            ad_id='5b232a051df60ca01353ac90',
+            image=unhexlify((
+                "47494638396101000100800000ff"
+                "ffff00000021f90401000000002c"
+                "00000000010001000002024401003b"
+            ))
+        )
+
+        self.assertTrue(res['success'])
+        self.assertEqual(res['ad']['image_url'], 'http://algo')
+        self.assertIsInstance(res['ad']['image_size'], list)
+        self.assertEqual(len(res['ad']['image_size']), 2)
+
+
 
 
 if __name__ == '__main__':

@@ -12,6 +12,10 @@ class TestClient(unittest.TestCase):
         self.client = APIClient('A', 'B')
         self.url = APIClient.BASE_URL
 
+    def tearDown(self):
+        httpretty.disable()
+        httpretty.reset()
+
     @httpretty.activate
     def test_create_campaign(self):
         httpretty.register_uri(httpretty.POST,
@@ -70,6 +74,26 @@ class TestClient(unittest.TestCase):
         self.assertEqual(res['pixel']['id'], 'abc')
         self.assertEqual(res['pixel']['campaign_id'], 'XYZ')
         self.assertEqual(res['pixel']['url'], join(self.url, 'pixel', 'XYZ.gif'))
+
+    @httpretty.activate
+    def test_get_campaigns(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'campaigns'),
+            body=json.dumps({
+                'success': True,
+                'campaigns': [
+                    {'id': 'abcd', 'description': 'One'},
+                    {'id': 'dcba', 'description': 'Two'},
+                ]
+            })
+        )
+
+        res = self.client.get_campaigns()
+
+        self.assertTrue(res['success'])
+        self.assertEqual(len(res['campaigns']), 2)
+        self.assertEqual(res['campaigns'][0]['id'], 'abcd')
+        self.assertEqual(res['campaigns'][1]['id'], 'dcba')
 
 
 if __name__ == '__main__':

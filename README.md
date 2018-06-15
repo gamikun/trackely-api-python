@@ -15,7 +15,8 @@
 	#   }
 	# }
 
-# Available methods
+
+# Available methods
 
 * create_campaign
 * create_ad

@@ -63,6 +63,15 @@ class APIClient(object):
 
         return response.json()
 
+    def get_campaigns(self):
+        url = os.path.join(self.base_url, 'campaigns')
+        response = requests.get(url,
+            headers=self.headers,
+        )
+        print("status {}".format(response.status_code))
+
+        return response.json()
+
 if __name__ == '__main__':
     client = APIClient('5afb53881df60c27f1721333',
         'ea8d90148485fb6d10c4f3e677b65ef8922cf88893cc678c0b6a5bfe579e0ced',

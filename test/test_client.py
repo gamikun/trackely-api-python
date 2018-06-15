@@ -95,6 +95,50 @@ class TestClient(unittest.TestCase):
         self.assertEqual(res['campaigns'][0]['id'], 'abcd')
         self.assertEqual(res['campaigns'][1]['id'], 'dcba')
 
+    @httpretty.activate
+    def test_get_ads(self):
+        # ------------------- #
+        # WITHOUT campaign ID #
+        # ------------------- #
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'ads': [
+                    {'id': 'abcd', 'description': 'Three'},
+                    {'id': 'dcba', 'description': 'Four'},
+                ]
+            })
+        )
+
+        res = self.client.get_ads()
+        self.assertTrue(res['success'])
+        self.assertIsInstance(res['ads'], list)
+        self.assertEqual(len(res['ads']), 2)
+
+        # ------------------- #
+        # WITH campaign ID    #
+        # ------------------- #
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'ads': [
+                    {
+                        'id': 'abcd',
+                        'description': 'Five',
+                        'campaign_id': 'b' * 24,
+                    },
+                ]
+            })
+        )
+
+        res = self.client.get_ads(campaign_id='b' * 24)
+        self.assertTrue(res['success'])
+        self.assertIsInstance(res['ads'], list)
+        self.assertEqual(len(res['ads']), 1)
+        self.assertEqual(res['ads'][0]['campaign_id'], 'b' * 24)
+
 
 if __name__ == '__main__':
     unittest.main()

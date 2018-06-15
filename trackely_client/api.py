@@ -68,7 +68,6 @@ class APIClient(object):
         response = requests.get(url,
             headers=self.headers,
         )
-        print("status {}".format(response.status_code))
 
         return response.json()
 

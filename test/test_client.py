@@ -167,6 +167,23 @@ class TestClient(unittest.TestCase):
         self.assertIsInstance(res['ad']['image_size'], list)
         self.assertEqual(len(res['ad']['image_size']), 2)
 
+    @httpretty.activate
+    def test_get_html_tag(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'html': '<div>something</div>',
+            })
+        )
+
+        res = self.client.get_ad_html_tag(
+            ad_id='5b232a051df60ca01353ac90'
+        )
+
+        self.assertTrue(res['success'])
+        self.assertEqual(res['html'], '<div>something</div>')
+
 
 
 

@@ -59,6 +59,18 @@ class APIClient(object):
 
         return response.json()
 
+    def get_ad_html_tag(self, ad_id=None):
+        url = os.path.join(self.base_url, 'ads')
+        response = requests.get(url,
+            headers=self.headers,
+            params={
+                'action': 'tag',
+                'ad_id': ad_id,
+            },
+        )
+
+        return response.json()
+
     def create_pixel(self, description=None, campaign_id=None):
         url = os.path.join(self.base_url, 'pixels')
         response = requests.post(url,

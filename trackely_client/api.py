@@ -31,7 +31,20 @@ class APIClient(object):
         )
         return response.json()
 
-    def create_ad(self, description=None, campaign_id=None,
+    def create_ad(self, description=None, campaign_id=None):
+        url = os.path.join(self.base_url, 'ads')
+
+        response = requests.post(url,
+            headers=self.headers,
+            data={
+                'description': description,
+                'campaign_id': campaign_id,
+            }
+        )
+
+        return response.json()
+
+    def modify_ad(self, description=None, campaign_id=None,
                   target_url=None, image_data=None):
         url = os.path.join(self.base_url, 'ads')
 

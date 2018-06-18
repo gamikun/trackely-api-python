@@ -207,6 +207,26 @@ class TestClient(unittest.TestCase):
         self.assertEqual(res['ad']['id'], 'ABC')
         self.assertEqual(res['ad']['target_url'], 'http://mexico.com/HOLA')
 
+    @httpretty.activate
+    def test_get_single_ad(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'ads'),
+            body=json.dumps({
+                'success': True,
+                'ad': {
+                    'id': 'ABC',
+                    'description': 'Mexico',
+                    'target_url': 'http://mexico.com/HOLA'
+                },
+            })
+        )
+
+        res = self.client.get_ad(ad_id='ABC')
+
+        self.assertTrue(res['success'])
+        self.assertIn('ad', res)
+        self.assertEqual(res['ad']['id'], 'ABC')
+
 
 if __name__ == '__main__':
     unittest.main()

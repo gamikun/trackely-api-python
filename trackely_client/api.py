@@ -103,6 +103,15 @@ class APIClient(object):
 
         return response.json()
 
+    def get_ad(self, ad_id):
+        url = os.path.join(self.base_url, 'ads')
+        response = requests.get(url,
+            headers=self.headers,
+            params={'ad_id': ad_id}
+        )
+
+        return response.json()
+
     def modify_ad(self, ad_id, **params):
         """ Modify basic values from an ad
         Supported parameters by API:

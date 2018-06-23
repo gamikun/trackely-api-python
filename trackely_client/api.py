@@ -128,7 +128,24 @@ class APIClient(object):
 
         return response.json()
 
+    def get_history(self, ad_id=None, sorted_by=None):
+        """
+         * sorted_by: latest
+         * ad_id: Ad ID
+        """
 
+        url = os.path.join(self.base_url, 'history')
+        params = {}
+
+        ad_id and params.update({'ad_id': ad_id})
+        sorted_by and params.update({'sorted': sorted_by})
+
+        response = requests.get(url,
+            headers=self.headers,
+            params=params,
+        )
+
+        return response.json()
 
 if __name__ == '__main__':
     client = APIClient('5afb53881df60c27f1721333',

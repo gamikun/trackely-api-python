@@ -227,6 +227,30 @@ class TestClient(unittest.TestCase):
         self.assertIn('ad', res)
         self.assertEqual(res['ad']['id'], 'ABC')
 
+    @httpretty.activate
+    def test_get_history(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'history'),
+            body=json.dumps({
+                'success': True,
+                'requests': [
+                    {
+                        'user_agent': 'A user agent; otro;',
+                        'date': '2018-01-02 03:04:05-0700',
+                    },
+                    {
+                        'user_agent': 'This is better',
+                        'date': '2018-01-02 03:09:05-0700'
+                    }
+                ],
+            })
+        )
+
+        res = self.client.get_history(ad_id='abcd', sorted_by='latest')
+
+        self.assertTrue(res['success'])
+        self.assertIn('requests', res)
+
 
 if __name__ == '__main__':
     unittest.main()

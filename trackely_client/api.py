@@ -147,6 +147,21 @@ class APIClient(object):
 
         return response.json()
 
+    def get_stats(self, ad_ids=None):
+        url = os.path.join(self.base_url, 'stats')
+        params = {}
+
+        if isinstance(ad_ids, list):
+            params['ad_id'] = ad_ids
+
+        response = requests.get(url,
+            headers=self.headers,
+            params=params,
+        )
+
+        return response.json()
+
+
 if __name__ == '__main__':
     client = APIClient('5afb53881df60c27f1721333',
         'ea8d90148485fb6d10c4f3e677b65ef8922cf88893cc678c0b6a5bfe579e0ced',

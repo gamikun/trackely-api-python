@@ -251,6 +251,28 @@ class TestClient(unittest.TestCase):
         self.assertTrue(res['success'])
         self.assertIn('requests', res)
 
+    @httpretty.activate
+    def test_get_statsa(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'stats'),
+            body=json.dumps({
+                'success': True,
+                'stats': [
+                    {
+                        "id": "ABCD",
+                        "total_clicks": 123,
+                        "total_prints": 321
+                    }
+                ],
+            })
+        )
+
+        res = self.client.get_stats(ad_ids=['ABCD'])
+
+        self.assertTrue(res['success'])
+        self.assertIn('stats', res)
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -147,12 +147,14 @@ class APIClient(object):
 
         return response.json()
 
-    def get_stats(self, ad_ids=None):
+    def get_stats(self, ad_id=None):
         url = os.path.join(self.base_url, 'stats')
         params = {}
 
-        if isinstance(ad_ids, list):
-            params['ad_id'] = ad_ids
+        if isinstance(ad_id, list):
+            params['ad_id'] = ",".join(ad_id)
+        elif isinstance(ad_id, str):
+            params['ad_id'] = ad_id
 
         response = requests.get(url,
             headers=self.headers,

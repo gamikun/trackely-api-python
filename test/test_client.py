@@ -252,7 +252,7 @@ class TestClient(unittest.TestCase):
         self.assertIn('requests', res)
 
     @httpretty.activate
-    def test_get_statsa(self):
+    def test_get_stats(self):
         httpretty.register_uri(httpretty.GET,
             join(self.url, 'stats'),
             body=json.dumps({
@@ -267,10 +267,30 @@ class TestClient(unittest.TestCase):
             })
         )
 
-        res = self.client.get_stats(ad_ids=['ABCD'])
+        res = self.client.get_stats(ad_id=['ABCD'])
 
         self.assertTrue(res['success'])
         self.assertIn('stats', res)
+
+    @httpretty.activate
+    def test_get_single_campaign(self):
+        httpretty.register_uri(httpretty.GET,
+            join(self.url, 'campaigns'),
+            body=json.dumps({
+                'success': True,
+                'campaigns': [
+                    {
+                        "id": "ABCD",
+                        "description": "something"
+                    }
+                ],
+            })
+        )
+
+        res = self.client.get_campaign(campaign_id=['ABCD'])
+
+        self.assertTrue(res['success'])
+        self.assertIn('campaigns', res)
 
 
 

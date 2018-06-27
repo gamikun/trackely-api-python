@@ -91,6 +91,15 @@ class APIClient(object):
 
         return response.json()
 
+    def get_campaign(self, campaign_id):
+        url = os.path.join(self.base_url, 'campaigns')
+        response = requests.get(url,
+            headers=self.headers,
+            params={'campaign_id': campaign_id}
+        )
+
+        return response.json()
+
     def get_ads(self, **params):
         """ Supported parameters by API: campaign_id
         """

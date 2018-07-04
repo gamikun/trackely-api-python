@@ -137,6 +137,18 @@ class APIClient(object):
 
         return response.json()
 
+    def modify_campaign(self, campaign_id, **params):
+        """ Modify basic values from a campaign """
+
+        url = os.path.join(self.base_url, 'campaigns')
+        response = requests.put(url,
+            headers=self.headers,
+            params={'campaign_id': campaign_id},
+            data=params
+        )
+
+        return response.json()
+
     def get_history(self, ad_id=None, sorted_by=None):
         """
          * sorted_by: latest
@@ -156,14 +168,18 @@ class APIClient(object):
 
         return response.json()
 
-    def get_stats(self, ad_id=None):
+    def get_stats(self, ad_id=None, campaign_id=None, period=1):
         url = os.path.join(self.base_url, 'stats')
-        params = {}
+        params = {'period': period} # ALL by default
 
         if isinstance(ad_id, list):
             params['ad_id'] = ",".join(ad_id)
         elif isinstance(ad_id, str):
             params['ad_id'] = ad_id
+        elif isinstance(campaign_id, list):
+            params['campaign_id'] = ",".join(campaign_id)
+        elif isinstance(campaign_id, str):
+            params['campaign_id'] = campaign_id
 
         response = requests.get(url,
             headers=self.headers,

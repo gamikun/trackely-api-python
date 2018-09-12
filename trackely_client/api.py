@@ -59,14 +59,13 @@ class APIClient(object):
 
         return response.json()
 
-    def get_ad_html_tag(self, ad_id=None):
+    def get_ad_html_tag(self, ad_id=None, **params):
         url = os.path.join(self.base_url, 'ads')
+        params['action'] = 'tag'
+        params['ad_id'] = ad_id
         response = requests.get(url,
             headers=self.headers,
-            params={
-                'action': 'tag',
-                'ad_id': ad_id,
-            },
+            params=params,
         )
 
         return response.json()
@@ -112,11 +111,12 @@ class APIClient(object):
 
         return response.json()
 
-    def get_ad(self, ad_id):
+    def get_ad(self, ad_id, **params):
         url = os.path.join(self.base_url, 'ads')
+        params['ad_id'] = ad_id
         response = requests.get(url,
             headers=self.headers,
-            params={'ad_id': ad_id}
+            params=params,
         )
 
         return response.json()
@@ -184,6 +184,29 @@ class APIClient(object):
         response = requests.get(url,
             headers=self.headers,
             params=params,
+        )
+
+        return response.json()
+
+    def get_taxonomy(self, tag=None):
+        url = os.path.join(self.base_url, 'taxonomy')
+        params = {}
+
+        if tag:
+            params['tag'] = tag
+
+        response = requests.get(url,
+            headers=self.headers,
+            params=params,
+        )
+
+        return response.json()
+
+    def create_taxonomy(self, **params):
+        url = os.path.join(self.base_url, 'taxonomy')
+        response = requests.post(url,
+            headers=self.headers,
+            data=params
         )
 
         return response.json()
